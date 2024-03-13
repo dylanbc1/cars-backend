@@ -12,7 +12,7 @@ export class CarsController {
 
     // delete, recibimos por parámetro el ID
     @Delete()
-    delete(@Param("id", ParseIntPipe) id: string): any {
+    delete(@Param("id", ParseUUIDPipe) id: string): any {
         console.log(id)
         return id
     }
