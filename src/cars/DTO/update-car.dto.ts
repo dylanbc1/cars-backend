@@ -1,12 +1,14 @@
 // decidimos que el DTO sea una clase para poder
 
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 // colocarle anotaciones
-export class CreateCarDto {
+export class UpdateCarDto {
     @IsString()
+    @IsOptional()
     readonly brand: string; // readonly para no permitir que el DTO se modifique
 
     @IsString()
+    @IsOptional()
     readonly model: string;
 }
