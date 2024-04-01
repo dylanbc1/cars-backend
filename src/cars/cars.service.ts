@@ -2,26 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {v4 as uuid} from 'uuid'
 import { CreateCarDto } from './DTO/create-car.dto';
 import { UpdateCarDto } from './DTO/update-car.dto';
+import { Car } from './interface/car.interface';
 
 @Injectable()
 export class CarsService {
-    private cars: Car[] = [
-        {
-            id: uuid(),
-            brand: 'Toyota',
-            model: 'Corolla'
-        },
-        {
-            id: uuid(),
-            brand: 'Honda',
-            model: 'Civic'   
-        },
-        {
-            id: uuid(),
-            brand: 'Jeep',
-            model: 'Cherokee'
-        }
-    ]
+    private cars: Car[] = []
+
+    // desde el modulo SEED me envian los datos de Cars y se lo asigno al array que poseo aqui
+    fillCarsWithSeedData(cars: Car[]): void {
+        this.cars = cars;
+    }
 
     delete(id: string): Car[] {
         const carExists = this.findOneById(id)
