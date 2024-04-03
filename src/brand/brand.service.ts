@@ -3,29 +3,36 @@ import {v4 as uuid} from 'uuid';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { Brand } from './entities/brand.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BrandService {
-  private brands: Brand[] = []
+  private brands: Brand[] = [];
+
+  // inyectamos el repositorio de Brands que creamos
+  // no es necesario crear el repositorio, nest
+  // ya lo crea automaticamente
+  constructor(
+    @InjectRepository(Brand) 
+    private readonly brandRepository: Repository<Brand>
+  ){
+  }
 
   // llenar data con seedData de Brands
   fillBrandsWithSeedData(brands: Brand[]): void {
     this.brands = brands;
   }
 
-  create(createBrandDto: CreateBrandDto) {
-    // obtenemos la propiedad name del createBrandDto
-    const {name} = createBrandDto;
+  async create(createBrandDto: CreateBrandDto) {
+    // creamos el objeto con el .create, lo mapea directo
+    // a la entity de la base de datos
+    const brand = this.brandRepository.create(createBrandDto);
 
-    // creamos el objeto tipo Brand
-    const brand: Brand = {
-      name,
-      id: uuid(),
-      createdAt: new Date().getTime()
-    }
+    // guardamos el objeto
+    await this.brandRepository.save(brand);
 
-    // efectuamos la creacion haciendo push en el arreglo
-    this.brands.push(brand)
+    return brand;
   }
 
   findAll() {
